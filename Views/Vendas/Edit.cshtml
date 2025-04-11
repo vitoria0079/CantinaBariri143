@@ -1,0 +1,49 @@
+﻿@model CantinaBariri143.Models.Vendas
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>Vendas</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="VendasId" />
+            <div class="form-group">
+                <label asp-for="ClientesId" class="control-label"></label>
+                <select asp-for="ClientesId" class="form-control" asp-items="ViewBag.ClientesId"></select>
+                <span asp-validation-for="ClientesId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PedidosId" class="control-label"></label>
+                <select asp-for="PedidosId" class="form-control" asp-items="ViewBag.PedidosId"></select>
+                <span asp-validation-for="PedidosId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DataVenda" class="control-label"></label>
+                <input asp-for="DataVenda" class="form-control" />
+                <span asp-validation-for="DataVenda" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Total" class="control-label"></label>
+                <input asp-for="Total" class="form-control" />
+                <span asp-validation-for="Total" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
