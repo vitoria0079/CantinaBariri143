@@ -4,6 +4,7 @@ using CantinaBariri143.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CantinaBariri143.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250411143747_Compras")]
+    partial class Compras
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -122,32 +125,6 @@ namespace CantinaBariri143.Data.Migrations
                     b.ToTable("Fornecedores", (string)null);
                 });
 
-            modelBuilder.Entity("CantinaBariri143.Models.Pedidos", b =>
-                {
-                    b.Property<Guid>("PedidosId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("AlimentosId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("DataPedido")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("Qtd")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Total")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("PedidosId");
-
-                    b.HasIndex("AlimentosId");
-
-                    b.ToTable("Pedidos", (string)null);
-                });
-
             modelBuilder.Entity("CantinaBariri143.Models.Usuarios", b =>
                 {
                     b.Property<Guid>("UsuariosId")
@@ -173,34 +150,6 @@ namespace CantinaBariri143.Data.Migrations
                     b.HasKey("UsuariosId");
 
                     b.ToTable("Usuarios", (string)null);
-                });
-
-            modelBuilder.Entity("CantinaBariri143.Models.Vendas", b =>
-                {
-                    b.Property<Guid>("VendasId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("ClientesId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("DataVenda")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("PedidosId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Total")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("VendasId");
-
-                    b.HasIndex("ClientesId");
-
-                    b.HasIndex("PedidosId");
-
-                    b.ToTable("Vendas", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -422,36 +371,6 @@ namespace CantinaBariri143.Data.Migrations
                     b.Navigation("Alimentos");
 
                     b.Navigation("Fornecedores");
-                });
-
-            modelBuilder.Entity("CantinaBariri143.Models.Pedidos", b =>
-                {
-                    b.HasOne("CantinaBariri143.Models.Alimentos", "Alimentos")
-                        .WithMany()
-                        .HasForeignKey("AlimentosId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Alimentos");
-                });
-
-            modelBuilder.Entity("CantinaBariri143.Models.Vendas", b =>
-                {
-                    b.HasOne("CantinaBariri143.Models.Clientes", "Clientes")
-                        .WithMany()
-                        .HasForeignKey("ClientesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("CantinaBariri143.Models.Pedidos", "Pedidos")
-                        .WithMany()
-                        .HasForeignKey("PedidosId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Clientes");
-
-                    b.Navigation("Pedidos");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
