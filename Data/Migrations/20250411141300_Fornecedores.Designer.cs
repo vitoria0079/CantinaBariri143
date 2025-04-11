@@ -4,6 +4,7 @@ using CantinaBariri143.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CantinaBariri143.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250411141300_Fornecedores")]
+    partial class Fornecedores
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,34 +24,6 @@ namespace CantinaBariri143.Data.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("CantinaBariri143.Models.Alimentos", b =>
-                {
-                    b.Property<Guid>("AlimentosId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Descricao")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<double>("PrecoUnitario")
-                        .HasColumnType("float");
-
-                    b.Property<int>("QtdEstoque")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Restricoes")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("Validade")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("AlimentosId");
-
-                    b.ToTable("Alimentos", (string)null);
-                });
 
             modelBuilder.Entity("CantinaBariri143.Models.Clientes", b =>
                 {
