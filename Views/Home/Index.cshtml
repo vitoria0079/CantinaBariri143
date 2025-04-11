@@ -1,8 +1,32 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
-
+<br />
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <h1 class="display-4 h1-home">CANTINA SESI-SP 143</h1>
+</div>
+<br />
+<div id="carouselExampleFade" class="carousel slide carousel-fade">
+    <div class="carousel-inner">
+        <div class="carousel-item active">
+            <img src="~/img/IMG CANTINA.png"
+                 class="d-block img-cantina col mx-auto" width="1000" height="500" alt="primeiro Slide" style="border-radius: 20px;">
+        </div>
+        <div class="carousel-item">
+            <img src="https://vagas.sc/wp-content/uploads/2024/06/edital-01378-2024-sesi-abre-oportunidade-de-emprego-para-atuacao-em-todo-o-estado-838x471.jpg"
+                 class="d-block img-cantina col mx-auto" width="1000" height="500" alt="segundo Slide" style="border-radius: 20px;">
+        </div>
+        <div class="carousel-item">
+            <img src="https://static.portaldaindustria.com.br/portaldaindustria/noticias/media/16_9/gassaladeaula_HRDkDOp.jpg"
+                 class="d-block img-cantina col mx-auto" width="1000" height="500" alt="terceiro Slide" style="border-radius: 20px;">
+        </div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleFade" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleFade" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
 </div>
