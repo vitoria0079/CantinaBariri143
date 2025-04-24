@@ -174,7 +174,7 @@ namespace CantinaBariri143.Controllers
             }
 
             var pedidos = await _context.Pedidos
-                .Where(a => a.Alimentos.Descricao.Contains(searchTerm))
+                .Where(a => a.Alimentos.Descricao.Contains(searchTerm)).Include(a => a.Alimentos)
                 .ToListAsync();
 
             return View("Index", pedidos);
