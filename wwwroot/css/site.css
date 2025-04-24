@@ -40,5 +40,20 @@ body {
     font-family: "Geologica", Sans Serif;
 }
 
-.img-cantina {
+.h1-registro {
+    font-family: "Geologica", Sans Serif;
 }
+
+.h2-registro {
+    font-family: "Geologica", Sans Serif;
+}
+
+.link-login {
+    text-decoration: none;
+    !important
+}
+
+    .link-login:hover {
+        text-decoration: underline;
+        !important
+    }
