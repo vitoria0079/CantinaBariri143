@@ -9,7 +9,7 @@
 <h4>Vendas</h4>
 <hr />
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-12">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="VendasId" />
@@ -23,15 +23,21 @@
                 <select asp-for="PedidosId" class="form-control" asp-items="ViewBag.PedidosId"></select>
                 <span asp-validation-for="PedidosId" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="DataVenda" class="control-label"></label>
-                <input asp-for="DataVenda" class="form-control" />
-                <span asp-validation-for="DataVenda" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Total" class="control-label"></label>
-                <input asp-for="Total" class="form-control" />
-                <span asp-validation-for="Total" class="text-danger"></span>
+            <div class="row">
+                <div class="col-md-12 col-lg-6">
+                    <div class="form-group">
+                        <label asp-for="DataVenda" class="control-label"></label>
+                        <input asp-for="DataVenda" class="form-control" />
+                        <span asp-validation-for="DataVenda" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-12 col-lg-6">
+                    <div class="form-group">
+                        <label asp-for="Total" class="control-label"></label>
+                        <input asp-for="Total" class="form-control" />
+                        <span asp-validation-for="Total" class="text-danger"></span>
+                    </div>
+                </div>
             </div>
 
             <div class="row">
