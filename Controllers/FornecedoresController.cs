@@ -22,9 +22,9 @@ namespace CantinaBariri143.Controllers
         // GET: Fornecedores
         public async Task<IActionResult> Index()
         {
-              return _context.Fornecedores != null ? 
-                          View(await _context.Fornecedores.ToListAsync()) :
-                          Problem("Entity set 'ApplicationDbContext.Fornecedores'  is null.");
+            return _context.Fornecedores != null ?
+                        View(await _context.Fornecedores.ToListAsync()) :
+                        Problem("Entity set 'ApplicationDbContext.Fornecedores'  is null.");
         }
 
         // GET: Fornecedores/Details/5
@@ -151,14 +151,30 @@ namespace CantinaBariri143.Controllers
             {
                 _context.Fornecedores.Remove(fornecedores);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool FornecedoresExists(Guid id)
         {
-          return (_context.Fornecedores?.Any(e => e.FornecedoresId == id)).GetValueOrDefault();
+            return (_context.Fornecedores?.Any(e => e.FornecedoresId == id)).GetValueOrDefault();
         }
+
+        // GET: Fornecedores/Search
+        public async Task<IActionResult> Search(string searchTerm)
+        {
+            if (string.IsNullOrWhiteSpace(searchTerm))
+            {
+                return View("Index", await _context.Fornecedores.ToListAsync());
+            }
+
+            var fornecedores = await _context.Fornecedores
+                .Where(a => a.RazaoSocial.Contains(searchTerm) || a.CNPJ.Contains(searchTerm))
+                .ToListAsync();
+
+            return View("Index", fornecedores);
+        }
+
     }
 }

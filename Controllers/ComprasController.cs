@@ -171,5 +171,20 @@ namespace CantinaBariri143.Controllers
         {
             return (_context.Compras?.Any(e => e.ComprasId == id)).GetValueOrDefault();
         }
+
+        public async Task<IActionResult> Search(string searchTerm)
+        {
+            if (string.IsNullOrWhiteSpace(searchTerm))
+            {
+                return View("Index", await _context.Compras.Include(a => a.Alimentos).Include(f => f.Fornecedores).ToListAsync());
+            }
+
+            var compras = await _context.Compras
+                .Where(a => a.Fornecedores.RazaoSocial.Contains(searchTerm) || a.Alimentos.Descricao.Contains(searchTerm)).Include(a => a.Alimentos).Include(f => f.Fornecedores)
+                .ToListAsync();
+
+            return View("Index", compras);
+        }
+
     }
 }

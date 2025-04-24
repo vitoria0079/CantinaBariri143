@@ -22,9 +22,9 @@ namespace CantinaBariri143.Controllers
         // GET: Clientes
         public async Task<IActionResult> Index()
         {
-              return _context.Clientes != null ? 
-                          View(await _context.Clientes.ToListAsync()) :
-                          Problem("Entity set 'ApplicationDbContext.Clientes'  is null.");
+            return _context.Clientes != null ?
+                        View(await _context.Clientes.ToListAsync()) :
+                        Problem("Entity set 'ApplicationDbContext.Clientes'  is null.");
         }
 
         // GET: Clientes/Details/5
@@ -151,14 +151,29 @@ namespace CantinaBariri143.Controllers
             {
                 _context.Clientes.Remove(clientes);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool ClientesExists(Guid id)
         {
-          return (_context.Clientes?.Any(e => e.ClientesId == id)).GetValueOrDefault();
+            return (_context.Clientes?.Any(e => e.ClientesId == id)).GetValueOrDefault();
+        }
+
+        // GET: Clientes/Search
+        public async Task<IActionResult> Search(string searchTerm)
+        {
+            if (string.IsNullOrWhiteSpace(searchTerm))
+            {
+                return View("Index", await _context.Clientes.ToListAsync());
+            }
+
+            var clientes = await _context.Clientes
+                .Where(a => a.Nome.Contains(searchTerm) || a.Restricao.Contains(searchTerm))
+                .ToListAsync();
+
+            return View("Index", clientes);
         }
     }
 }
