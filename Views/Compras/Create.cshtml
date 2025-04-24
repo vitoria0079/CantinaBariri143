@@ -4,7 +4,7 @@
     ViewData["Title"] = "Create";
 }
 
-<h1>Criar</h1>
+<h1>Adicionar</h1>
 
 <h4>Compras</h4>
 <hr />
@@ -14,11 +14,11 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="FornecedoresId" class="control-label"></label>
-                <select asp-for="FornecedoresId" class ="form-control" asp-items="ViewBag.FornecedoresId"></select>
+                <select asp-for="FornecedoresId" class="form-control" asp-items="ViewBag.FornecedoresId"></select>
             </div>
             <div class="form-group">
                 <label asp-for="AlimentosId" class="control-label"></label>
-                <select asp-for="AlimentosId" class ="form-control" asp-items="ViewBag.AlimentosId"></select>
+                <select asp-for="AlimentosId" class="form-control" asp-items="ViewBag.AlimentosId"></select>
             </div>
             <div class="form-group">
                 <label asp-for="PrecoUnitario" class="control-label"></label>
@@ -35,16 +35,26 @@
                 <input asp-for="QtdUnitaria" class="form-control" />
                 <span asp-validation-for="QtdUnitaria" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Criar" class="btn btn-primary" />
+
+            <div class="row">
+                <div class="col-6 mt-3">
+                    <div class="form-group">
+                        <input type="submit" class="btn btn-danger text-light w-100 p-2" value="Criar" />
+                    </div>
+                </div>
+
+                <div class="col-6 mt-3">
+                    <div>
+                        <a asp-action="Index" type="button" class="btn btn-danger text-light w-100 p-2">Voltar</a>
+                    </div>
+                </div>
             </div>
+
+
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Voltar</a>
-</div>
 
 @section Scripts {
     @{
