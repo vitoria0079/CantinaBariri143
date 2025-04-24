@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CantinaBariri143.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250411173824_Tabelas")]
+    [Migration("20250411174355_Tabelas")]
     partial class Tabelas
     {
         /// <inheritdoc />
