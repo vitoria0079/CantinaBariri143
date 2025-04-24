@@ -49,8 +49,8 @@ namespace CantinaBariri143.Controllers
         // GET: Compras/Create
         public IActionResult Create()
         {
-            ViewData["AlimentosId"] = new SelectList(_context.Alimentos, "AlimentosId", "AlimentosId");
-            ViewData["FornecedoresId"] = new SelectList(_context.Fornecedores, "FornecedoresId", "FornecedoresId");
+            ViewData["AlimentosId"] = new SelectList(_context.Alimentos, "AlimentosId", "Descricao");
+            ViewData["FornecedoresId"] = new SelectList(_context.Fornecedores, "FornecedoresId", "RazaoSocial");
             return View();
         }
 
@@ -68,8 +68,8 @@ namespace CantinaBariri143.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["AlimentosId"] = new SelectList(_context.Alimentos, "AlimentosId", "AlimentosId", compras.AlimentosId);
-            ViewData["FornecedoresId"] = new SelectList(_context.Fornecedores, "FornecedoresId", "FornecedoresId", compras.FornecedoresId);
+            ViewData["AlimentosId"] = new SelectList(_context.Alimentos, "AlimentosId", "Descricao", compras.AlimentosId);
+            ViewData["FornecedoresId"] = new SelectList(_context.Fornecedores, "FornecedoresId", "RazaoSocial", compras.FornecedoresId);
             return View(compras);
         }
 
@@ -86,8 +86,8 @@ namespace CantinaBariri143.Controllers
             {
                 return NotFound();
             }
-            ViewData["AlimentosId"] = new SelectList(_context.Alimentos, "AlimentosId", "AlimentosId", compras.AlimentosId);
-            ViewData["FornecedoresId"] = new SelectList(_context.Fornecedores, "FornecedoresId", "FornecedoresId", compras.FornecedoresId);
+            ViewData["AlimentosId"] = new SelectList(_context.Alimentos, "AlimentosId", "Descricao", compras.AlimentosId);
+            ViewData["FornecedoresId"] = new SelectList(_context.Fornecedores, "FornecedoresId", "RazaoSocial", compras.FornecedoresId);
             return View(compras);
         }
 
@@ -123,8 +123,8 @@ namespace CantinaBariri143.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["AlimentosId"] = new SelectList(_context.Alimentos, "AlimentosId", "AlimentosId", compras.AlimentosId);
-            ViewData["FornecedoresId"] = new SelectList(_context.Fornecedores, "FornecedoresId", "FornecedoresId", compras.FornecedoresId);
+            ViewData["AlimentosId"] = new SelectList(_context.Alimentos, "AlimentosId", "Descricao", compras.AlimentosId);
+            ViewData["FornecedoresId"] = new SelectList(_context.Fornecedores, "FornecedoresId", "RazaoSocial", compras.FornecedoresId);
             return View(compras);
         }
 
@@ -162,14 +162,14 @@ namespace CantinaBariri143.Controllers
             {
                 _context.Compras.Remove(compras);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool ComprasExists(Guid id)
         {
-          return (_context.Compras?.Any(e => e.ComprasId == id)).GetValueOrDefault();
+            return (_context.Compras?.Any(e => e.ComprasId == id)).GetValueOrDefault();
         }
     }
 }
