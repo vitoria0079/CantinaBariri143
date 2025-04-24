@@ -10,21 +10,31 @@
     <h4>Fornecedores</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.RazaoSocial)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.RazaoSocial)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.CNPJ)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.CNPJ)
         </dd>
     </dl>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.FornecedoresId">Editar</a> 
-    <a asp-action="Index">Voltar</a>
+
+<div class="row">
+    <div class="col-6 mt-3">
+        <div class="form-group">
+            <a asp-action="Edit" asp-route-id="@Model?.FornecedoresId" class="btn btn-danger text-light w-100 p-2">Editar</a>
+        </div>
+    </div>
+
+    <div class="col-6 mt-3">
+        <div>
+            <a asp-action="Index" type="button" class="btn btn-danger text-light w-100 p-2">Voltar</a>
+        </div>
+    </div>
 </div>

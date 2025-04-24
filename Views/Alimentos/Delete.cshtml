@@ -45,6 +45,11 @@
     <form asp-action="Delete">
         <input type="hidden" asp-for="AlimentosId" />
         <input type="submit" value="Deletar" class="btn btn-danger" />
-        <a asp-action="Index">Voltar</a>
+        <div class="col-6 mt-3">
+            <div>
+                <a asp-action="Index" class="btn btn-danger">Voltar </a>
+            </div>
+        </div>
     </form>
+
 </div>
