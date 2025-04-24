@@ -22,9 +22,9 @@ namespace CantinaBariri143.Controllers
         // GET: Alimentos
         public async Task<IActionResult> Index()
         {
-              return _context.Alimentos != null ? 
-                          View(await _context.Alimentos.ToListAsync()) :
-                          Problem("Entity set 'ApplicationDbContext.Alimentos'  is null.");
+            return _context.Alimentos != null ?
+                        View(await _context.Alimentos.ToListAsync()) :
+                        Problem("Entity set 'ApplicationDbContext.Alimentos'  is null.");
         }
 
         // GET: Alimentos/Details/5
@@ -151,14 +151,31 @@ namespace CantinaBariri143.Controllers
             {
                 _context.Alimentos.Remove(alimentos);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool AlimentosExists(Guid id)
         {
-          return (_context.Alimentos?.Any(e => e.AlimentosId == id)).GetValueOrDefault();
+            return (_context.Alimentos?.Any(e => e.AlimentosId == id)).GetValueOrDefault();
         }
+
+        // GET: Alimentos/Search
+        public async Task<IActionResult> Search(string searchTerm)
+        {
+            if (string.IsNullOrWhiteSpace(searchTerm))
+            {
+                return View("Index", await _context.Alimentos.ToListAsync());
+            }
+
+            var alimentos = await _context.Alimentos
+                .Where(a => a.Descricao.Contains(searchTerm) || a.Restricoes.Contains(searchTerm))
+                .ToListAsync();
+
+            return View("Index", alimentos);
+        }
+
     }
 }
+
