@@ -48,7 +48,7 @@ namespace CantinaBariri143.Controllers
         // GET: Pedidos/Create
         public IActionResult Create()
         {
-            ViewData["AlimentosId"] = new SelectList(_context.Alimentos, "AlimentosId", "AlimentosId");
+            ViewData["AlimentosId"] = new SelectList(_context.Alimentos, "AlimentosId", "Descricao");
             return View();
         }
 
@@ -66,7 +66,7 @@ namespace CantinaBariri143.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["AlimentosId"] = new SelectList(_context.Alimentos, "AlimentosId", "AlimentosId", pedidos.AlimentosId);
+            ViewData["AlimentosId"] = new SelectList(_context.Alimentos, "AlimentosId", "Descricao", pedidos.AlimentosId);
             return View(pedidos);
         }
 
@@ -83,7 +83,7 @@ namespace CantinaBariri143.Controllers
             {
                 return NotFound();
             }
-            ViewData["AlimentosId"] = new SelectList(_context.Alimentos, "AlimentosId", "AlimentosId", pedidos.AlimentosId);
+            ViewData["AlimentosId"] = new SelectList(_context.Alimentos, "AlimentosId", "Descricao", pedidos.AlimentosId);
             return View(pedidos);
         }
 
@@ -119,7 +119,7 @@ namespace CantinaBariri143.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["AlimentosId"] = new SelectList(_context.Alimentos, "AlimentosId", "AlimentosId", pedidos.AlimentosId);
+            ViewData["AlimentosId"] = new SelectList(_context.Alimentos, "AlimentosId", "Descricao", pedidos.AlimentosId);
             return View(pedidos);
         }
 
@@ -156,14 +156,14 @@ namespace CantinaBariri143.Controllers
             {
                 _context.Pedidos.Remove(pedidos);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool PedidosExists(Guid id)
         {
-          return (_context.Pedidos?.Any(e => e.PedidosId == id)).GetValueOrDefault();
+            return (_context.Pedidos?.Any(e => e.PedidosId == id)).GetValueOrDefault();
         }
     }
 }

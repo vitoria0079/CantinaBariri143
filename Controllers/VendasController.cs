@@ -49,8 +49,8 @@ namespace CantinaBariri143.Controllers
         // GET: Vendas/Create
         public IActionResult Create()
         {
-            ViewData["ClientesId"] = new SelectList(_context.Clientes, "ClientesId", "ClientesId");
-            ViewData["PedidosId"] = new SelectList(_context.Pedidos, "PedidosId", "PedidosId");
+            ViewData["ClientesId"] = new SelectList(_context.Clientes, "ClientesId", "Nome");
+            ViewData["PedidosId"] = new SelectList(_context.Pedidos, "PedidosId", "AlimentosId");
             return View();
         }
 
@@ -68,8 +68,8 @@ namespace CantinaBariri143.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ClientesId"] = new SelectList(_context.Clientes, "ClientesId", "ClientesId", vendas.ClientesId);
-            ViewData["PedidosId"] = new SelectList(_context.Pedidos, "PedidosId", "PedidosId", vendas.PedidosId);
+            ViewData["ClientesId"] = new SelectList(_context.Clientes, "ClientesId", "Nome", vendas.ClientesId);
+            ViewData["PedidosId"] = new SelectList(_context.Pedidos, "PedidosId", "AlimentosId", vendas.PedidosId);
             return View(vendas);
         }
 
@@ -86,8 +86,8 @@ namespace CantinaBariri143.Controllers
             {
                 return NotFound();
             }
-            ViewData["ClientesId"] = new SelectList(_context.Clientes, "ClientesId", "ClientesId", vendas.ClientesId);
-            ViewData["PedidosId"] = new SelectList(_context.Pedidos, "PedidosId", "PedidosId", vendas.PedidosId);
+            ViewData["ClientesId"] = new SelectList(_context.Clientes, "ClientesId", "Nome", vendas.ClientesId);
+            ViewData["PedidosId"] = new SelectList(_context.Pedidos, "PedidosId", "AlimentosId", vendas.PedidosId);
             return View(vendas);
         }
 
@@ -123,8 +123,8 @@ namespace CantinaBariri143.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ClientesId"] = new SelectList(_context.Clientes, "ClientesId", "ClientesId", vendas.ClientesId);
-            ViewData["PedidosId"] = new SelectList(_context.Pedidos, "PedidosId", "PedidosId", vendas.PedidosId);
+            ViewData["ClientesId"] = new SelectList(_context.Clientes, "ClientesId", "Nome", vendas.ClientesId);
+            ViewData["PedidosId"] = new SelectList(_context.Pedidos, "PedidosId", "AlimentosId", vendas.PedidosId);
             return View(vendas);
         }
 
@@ -162,14 +162,14 @@ namespace CantinaBariri143.Controllers
             {
                 _context.Vendas.Remove(vendas);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool VendasExists(Guid id)
         {
-          return (_context.Vendas?.Any(e => e.VendasId == id)).GetValueOrDefault();
+            return (_context.Vendas?.Any(e => e.VendasId == id)).GetValueOrDefault();
         }
     }
 }
