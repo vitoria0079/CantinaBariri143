@@ -168,6 +168,7 @@ namespace CantinaBariri143.Controllers
 
         public async Task<IActionResult> Search(string searchTerm)
         {
+
             if (string.IsNullOrWhiteSpace(searchTerm))
             {
                 return View("Index", await _context.Pedidos.Include(a => a.Alimentos).ToListAsync());
