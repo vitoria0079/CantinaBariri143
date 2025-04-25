@@ -168,13 +168,14 @@ namespace CantinaBariri143.Controllers
 
         public async Task<IActionResult> Search(string searchTerm)
         {
+
             if (string.IsNullOrWhiteSpace(searchTerm))
             {
                 return View("Index", await _context.Pedidos.Include(a => a.Alimentos).ToListAsync());
             }
 
             var pedidos = await _context.Pedidos
-                .Where(a => a.Alimentos.Descricao.Contains(searchTerm))
+                .Where(a => a.Alimentos.Descricao.Contains(searchTerm)).Include(a => a.Alimentos)
                 .ToListAsync();
 
             return View("Index", pedidos);
