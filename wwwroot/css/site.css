@@ -53,7 +53,12 @@ body {
     !important
 }
 
-    .link-login:hover {
-        text-decoration: underline;
-        !important
-    }
+.link-red {
+    color: darkred !important;
+    text-decoration: none !important;
+}
+
+.link-login:hover, .link-red {
+    text-decoration: underline;
+    !important
+}
