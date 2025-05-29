@@ -22,8 +22,7 @@ namespace CantinaBariri143.Controllers
         // GET: Pedidos
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Pedidos.Include(p => p.Alimentos);
-            return View(await applicationDbContext.ToListAsync());
+            return View(await _context.Pedidos.Include(p => p.Alimentos).ToListAsync());
         }
 
         // GET: Pedidos/Details/5
