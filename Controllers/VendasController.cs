@@ -63,27 +63,25 @@ namespace CantinaBariri143.Controllers
         {
             if (ModelState.IsValid)
             {
-                // Busca o cliente e o alimento do pedido
-                var cliente = await _context.Clientes.FindAsync(vendas.ClientesId);
+                // Busca o pedido e o alimento relacionado
                 var pedido = await _context.Pedidos
                     .Include(p => p.Alimentos)
                     .FirstOrDefaultAsync(p => p.PedidosId == vendas.PedidosId);
 
-                if (cliente != null && pedido?.Alimentos != null)
+                if (pedido?.Alimentos != null)
                 {
-                    // Suporte a múltiplas restrições separadas por vírgula
-                    var restricoesCliente = cliente.Restricao?.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries) ?? Array.Empty<string>();
-                    var restricoesAlimento = pedido.Alimentos.Restricoes?.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries) ?? Array.Empty<string>();
-
-                    var restricoesEmComum = restricoesCliente.Intersect(restricoesAlimento, StringComparer.OrdinalIgnoreCase).ToList();
-
-                    if (restricoesEmComum.Any())
+                    // Verifica se há estoque suficiente
+                    if (pedido.Alimentos.QtdEstoque < pedido.Qtd)
                     {
-                        ViewBag.AlertaRestricao = $"Atenção: O cliente '{cliente.Nome}' possui restrição alimentar ({string.Join(", ", restricoesEmComum)}) e o alimento '{pedido.Alimentos.Descricao}' contém essa restrição. Venda pode ser perigosa!";
+                        ViewBag.AlertaRestricao = $"Estoque insuficiente para o alimento '{pedido.Alimentos.Descricao}'.";
                         ViewData["ClientesId"] = new SelectList(_context.Clientes, "ClientesId", "Nome", vendas.ClientesId);
                         ViewData["PedidosId"] = new SelectList(_context.Pedidos, "PedidosId", "AlimentosId", vendas.PedidosId);
-                        return View(vendas); // Não salva, apenas exibe o alerta
+                        return View(vendas);
                     }
+
+                    // Diminui o estoque
+                    pedido.Alimentos.QtdEstoque -= pedido.Qtd;
+                    _context.Alimentos.Update(pedido.Alimentos);
                 }
 
                 vendas.VendasId = Guid.NewGuid();
@@ -95,6 +93,7 @@ namespace CantinaBariri143.Controllers
             ViewData["PedidosId"] = new SelectList(_context.Pedidos, "PedidosId", "AlimentosId", vendas.PedidosId);
             return View(vendas);
         }
+
 
 
 
@@ -182,13 +181,24 @@ namespace CantinaBariri143.Controllers
             {
                 return Problem("Entity set 'ApplicationDbContext.Vendas'  is null.");
             }
-            var vendas = await _context.Vendas.FindAsync(id);
+            var vendas = await _context.Vendas
+                .Include(v => v.Pedidos)
+                .ThenInclude(p => p.Alimentos)
+                .FirstOrDefaultAsync(v => v.VendasId == id);
+
             if (vendas != null)
             {
+                // Devolve a quantidade ao estoque
+                if (vendas.Pedidos?.Alimentos != null)
+                {
+                    vendas.Pedidos.Alimentos.QtdEstoque += vendas.Pedidos.Qtd;
+                    _context.Alimentos.Update(vendas.Pedidos.Alimentos);
+                }
+
                 _context.Vendas.Remove(vendas);
+                await _context.SaveChangesAsync();
             }
 
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
