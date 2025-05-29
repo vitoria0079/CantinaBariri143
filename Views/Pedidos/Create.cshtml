@@ -14,13 +14,14 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="AlimentosId" class="control-label"></label>
-                <select asp-for="AlimentosId" class="form-control" asp-items="ViewBag.AlimentosId"></select>
+                <select asp-for="AlimentosId" class="form-control" asp-items="ViewBag.AlimentosId" id="AlimentosId"></select>
+                <input type="hidden" id="PrecoUnitario" />
             </div>
             <div class="row">
                 <div class="col-md-12 col-lg-4">
                     <div class="form-group">
                         <label asp-for="Qtd" class="control-label"></label>
-                        <input asp-for="Qtd" class="form-control" />
+                        <input asp-for="Qtd" class="form-control" id="Qtd" />
                         <span asp-validation-for="Qtd" class="text-danger"></span>
                     </div>
                 </div>
@@ -34,7 +35,7 @@
                 <div class="col-md-12 col-lg-4">
                     <div class="form-group">
                         <label asp-for="Total" class="control-label"></label>
-                        <input asp-for="Total" class="form-control" />
+                        <input asp-for="Total" class="form-control" id="Total" readonly />
                         <span asp-validation-for="Total" class="text-danger"></span>
                     </div>
                 </div>
@@ -64,4 +65,25 @@
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
+    <script>
+        // Dicionário de valores unitários vindos do backend
+        var valoresAlimentos = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.AlimentosValores));
+
+        function atualizarTotal() {
+            var alimentoId = document.getElementById("AlimentosId").value;
+            var precoUnitario = valoresAlimentos[alimentoId] || 0;
+            document.getElementById("PrecoUnitario").value = precoUnitario;
+
+            var qtd = parseFloat(document.getElementById("Qtd").value) || 0;
+            var total = precoUnitario * qtd;
+            // Formata para 2 casas decimais, separador decimal brasileiro
+            document.getElementById("Total").value = total.toFixed(2).replace('.', ',');
+        }
+
+        document.getElementById("AlimentosId").addEventListener("change", atualizarTotal);
+        document.getElementById("Qtd").addEventListener("input", atualizarTotal);
+
+        // Inicializa ao carregar a página
+        atualizarTotal();
+    </script>
 }
