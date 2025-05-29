@@ -49,8 +49,10 @@ namespace CantinaBariri143.Controllers
         // GET: Compras/Create
         public IActionResult Create()
         {
-            ViewData["AlimentosId"] = new SelectList(_context.Alimentos, "AlimentosId", "Descricao");
             ViewData["FornecedoresId"] = new SelectList(_context.Fornecedores, "FornecedoresId", "RazaoSocial");
+            ViewData["AlimentosId"] = new SelectList(_context.Alimentos, "AlimentosId", "Descricao");
+            ViewBag.AlimentosValores = _context.Alimentos
+                .ToDictionary(a => a.AlimentosId.ToString(), a => a.PrecoUnitario);
             return View();
         }
 
@@ -66,12 +68,25 @@ namespace CantinaBariri143.Controllers
                 compras.ComprasId = Guid.NewGuid();
                 _context.Add(compras);
                 await _context.SaveChangesAsync();
+
+                // Atualiza o estoque do alimento comprado
+                var alimento = await _context.Alimentos.FindAsync(compras.AlimentosId);
+                if (alimento != null)
+                {
+                    alimento.QtdEstoque += compras.QtdUnitaria;
+                    _context.Alimentos.Update(alimento);
+                    await _context.SaveChangesAsync();
+                }
+
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["AlimentosId"] = new SelectList(_context.Alimentos, "AlimentosId", "Descricao", compras.AlimentosId);
             ViewData["FornecedoresId"] = new SelectList(_context.Fornecedores, "FornecedoresId", "RazaoSocial", compras.FornecedoresId);
+            ViewData["AlimentosId"] = new SelectList(_context.Alimentos, "AlimentosId", "Descricao", compras.AlimentosId);
+            ViewBag.AlimentosValores = _context.Alimentos
+                .ToDictionary(a => a.AlimentosId.ToString(), a => a.PrecoUnitario);
             return View(compras);
         }
+
 
         // GET: Compras/Edit/5
         public async Task<IActionResult> Edit(Guid? id)
@@ -153,19 +168,24 @@ namespace CantinaBariri143.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            if (_context.Compras == null)
+            var compra = await _context.Compras.FindAsync(id);
+            if (compra != null)
             {
-                return Problem("Entity set 'ApplicationDbContext.Compras'  is null.");
-            }
-            var compras = await _context.Compras.FindAsync(id);
-            if (compras != null)
-            {
-                _context.Compras.Remove(compras);
-            }
+                // Atualiza o estoque do alimento
+                var alimento = await _context.Alimentos.FindAsync(compra.AlimentosId);
+                if (alimento != null)
+                {
+                    alimento.QtdEstoque -= compra.QtdUnitaria;
+                    if (alimento.QtdEstoque < 0) alimento.QtdEstoque = 0; // Evita estoque negativo
+                    _context.Update(alimento);
+                }
 
-            await _context.SaveChangesAsync();
+                _context.Compras.Remove(compra);
+                await _context.SaveChangesAsync();
+            }
             return RedirectToAction(nameof(Index));
         }
+
 
         private bool ComprasExists(Guid id)
         {

@@ -15,6 +15,10 @@
             <div class="form-group">
                 <label asp-for="AlimentosId" class="control-label"></label>
                 <select asp-for="AlimentosId" class="form-control" asp-items="ViewBag.AlimentosId" id="AlimentosId"></select>
+                <div class="form-group mt-2">
+                    <label>Preço Unitário</label>
+                    <input class="form-control" id="PrecoUnitarioVisivel" type="text" readonly />
+                </div>
                 <input type="hidden" id="PrecoUnitario" />
             </div>
             <div class="row">
@@ -69,14 +73,16 @@
         // Dicionário de valores unitários vindos do backend
         var valoresAlimentos = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.AlimentosValores));
 
-        function atualizarTotal() {
+               function atualizarTotal() {
             var alimentoId = document.getElementById("AlimentosId").value;
             var precoUnitario = valoresAlimentos[alimentoId] || 0;
             document.getElementById("PrecoUnitario").value = precoUnitario;
 
+            // Atualiza o campo visível
+            document.getElementById("PrecoUnitarioVisivel").value = precoUnitario.toLocaleString('pt-BR', { minimumFractionDigits: 2 });
+
             var qtd = parseFloat(document.getElementById("Qtd").value) || 0;
             var total = precoUnitario * qtd;
-            // Formata para 2 casas decimais, separador decimal brasileiro
             document.getElementById("Total").value = total.toFixed(2).replace('.', ',');
         }
 
