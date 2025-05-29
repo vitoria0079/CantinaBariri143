@@ -63,6 +63,29 @@ namespace CantinaBariri143.Controllers
         {
             if (ModelState.IsValid)
             {
+                // Busca o cliente e o alimento do pedido
+                var cliente = await _context.Clientes.FindAsync(vendas.ClientesId);
+                var pedido = await _context.Pedidos
+                    .Include(p => p.Alimentos)
+                    .FirstOrDefaultAsync(p => p.PedidosId == vendas.PedidosId);
+
+                if (cliente != null && pedido?.Alimentos != null)
+                {
+                    // Suporte a múltiplas restrições separadas por vírgula
+                    var restricoesCliente = cliente.Restricao?.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries) ?? Array.Empty<string>();
+                    var restricoesAlimento = pedido.Alimentos.Restricoes?.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries) ?? Array.Empty<string>();
+
+                    var restricoesEmComum = restricoesCliente.Intersect(restricoesAlimento, StringComparer.OrdinalIgnoreCase).ToList();
+
+                    if (restricoesEmComum.Any())
+                    {
+                        ViewBag.AlertaRestricao = $"Atenção: O cliente '{cliente.Nome}' possui restrição alimentar ({string.Join(", ", restricoesEmComum)}) e o alimento '{pedido.Alimentos.Descricao}' contém essa restrição. Venda pode ser perigosa!";
+                        ViewData["ClientesId"] = new SelectList(_context.Clientes, "ClientesId", "Nome", vendas.ClientesId);
+                        ViewData["PedidosId"] = new SelectList(_context.Pedidos, "PedidosId", "AlimentosId", vendas.PedidosId);
+                        return View(vendas); // Não salva, apenas exibe o alerta
+                    }
+                }
+
                 vendas.VendasId = Guid.NewGuid();
                 _context.Add(vendas);
                 await _context.SaveChangesAsync();
@@ -72,6 +95,8 @@ namespace CantinaBariri143.Controllers
             ViewData["PedidosId"] = new SelectList(_context.Pedidos, "PedidosId", "AlimentosId", vendas.PedidosId);
             return View(vendas);
         }
+
+
 
         // GET: Vendas/Edit/5
         public async Task<IActionResult> Edit(Guid? id)

@@ -4,6 +4,13 @@
     ViewData["Title"] = "Create";
 }
 
+@if (ViewBag.AlertaRestricao != null)
+{
+    <div class="alert alert-danger">
+        @ViewBag.AlertaRestricao
+    </div>
+}
+
 <h1>Adicionar</h1>
 
 <h4>Vendas</h4>
