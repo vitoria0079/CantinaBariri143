@@ -21,32 +21,33 @@
                 <select asp-for="AlimentosId" class="form-control" asp-items="ViewBag.AlimentosId" id="AlimentosId"></select>
             </div>
             <div class="row">
-                <div class="col-md-12 col-lg-4">
+                <div class="col-md-6">
                     <div class="form-group">
                         <label asp-for="PrecoUnitario" class="control-label"></label>
                         <input asp-for="PrecoUnitario" class="form-control" type="text" data-val="false" id="PrecoUnitario" readonly />
                         <span asp-validation-for="PrecoUnitario" class="text-danger"></span>
                     </div>
                 </div>
-                <div class="col-md-12 col-lg-4">
+                <div class="col-md-6">
                     <div class="form-group">
                         <label asp-for="DataCompra" class="control-label"></label>
                         <input asp-for="DataCompra" class="form-control" readonly value="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")" />
                         <span asp-validation-for="DataCompra" class="text-danger"></span>
                     </div>
                 </div>
-                <div class="col-md-12 col-lg-4">
+            </div>
+            <div class="row">
+                <div class="col-md-6">
                     <div class="form-group">
                         <label asp-for="QtdUnitaria" class="control-label"></label>
                         <input asp-for="QtdUnitaria" class="form-control" id="QtdUnitaria" />
                         <span asp-validation-for="QtdUnitaria" class="text-danger"></span>
                     </div>
-
-                    <div class="col-md-12 col-lg-4">
-                        <div class="form-group">
-                            <label>Total</label>
-                            <input class="form-control" id="Total" name="Total" type="text" readonly />
-                        </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Total</label>
+                        <input class="form-control" id="Total" name="Total" type="text" readonly />
                     </div>
                 </div>
             </div>
@@ -64,8 +65,6 @@
                     </div>
                 </div>
             </div>
-
-
         </form>
     </div>
 </div>
@@ -75,7 +74,7 @@
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
     <script>
-            document.addEventListener("DOMContentLoaded", function () {
+        document.addEventListener("DOMContentLoaded", function () {
             var valoresAlimentos = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.AlimentosValores));
 
             function atualizarPrecoUnitarioETotal() {
