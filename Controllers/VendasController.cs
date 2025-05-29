@@ -34,66 +34,105 @@ namespace CantinaBariri143.Controllers
                 return NotFound();
             }
 
-            var vendas = await _context.Vendas
+            var venda = await _context.Vendas
                 .Include(v => v.Clientes)
-                .Include(v => v.Pedidos)
                 .FirstOrDefaultAsync(m => m.VendasId == id);
-            if (vendas == null)
+
+            if (venda == null)
             {
                 return NotFound();
             }
 
-            return View(vendas);
+            // Busca os pedidos relacionados a esta venda pelo mesmo cliente e data da venda
+            var pedidosDaVenda = await _context.Pedidos
+                .Where(p => p.DataPedido.Date == venda.DataVenda.Date && p.AlimentosId == venda.Pedidos.AlimentosId && p.Qtd == venda.Pedidos.Qtd && p.Total == venda.Pedidos.Total)
+                .ToListAsync();
+
+            // Ou, se quiser buscar todos os pedidos do cliente na mesma data:
+            // var pedidosDaVenda = await _context.Pedidos
+            //     .Where(p => p.DataPedido.Date == venda.DataVenda.Date && p.AlimentosId == venda.Pedidos.AlimentosId)
+            //     .ToListAsync();
+
+            ViewBag.PedidosDaVenda = pedidosDaVenda;
+
+            return View(venda);
         }
 
         // GET: Vendas/Create
         public IActionResult Create()
         {
             ViewData["ClientesId"] = new SelectList(_context.Clientes, "ClientesId", "Nome");
-            ViewData["PedidosId"] = new SelectList(_context.Pedidos, "PedidosId", "AlimentosId");
+            ViewBag.Pedidos = _context.Pedidos
+                .Select(p => new { p.PedidosId, p.Total })
+                .ToList();
+
             return View();
         }
+
 
         // POST: Vendas/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("VendasId,ClientesId,PedidosId,DataVenda,Total")] Vendas vendas)
+        public async Task<IActionResult> Create(Vendas vendas, List<Guid> PedidosIds)
         {
             if (ModelState.IsValid)
             {
-                // Busca o pedido e o alimento relacionado
-                var pedido = await _context.Pedidos
+                var cliente = await _context.Clientes.FindAsync(vendas.ClientesId);
+                var pedidosSelecionados = _context.Pedidos
                     .Include(p => p.Alimentos)
-                    .FirstOrDefaultAsync(p => p.PedidosId == vendas.PedidosId);
+                    .Where(p => PedidosIds.Contains(p.PedidosId))
+                    .ToList();
 
-                if (pedido?.Alimentos != null)
+                // Verifica restrições
+                var restricoesCliente = (cliente?.Restricao ?? "").Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+                var conflitos = new List<string>();
+
+                foreach (var pedido in pedidosSelecionados)
                 {
-                    // Verifica se há estoque suficiente
-                    if (pedido.Alimentos.QtdEstoque < pedido.Qtd)
+                    var restricoesAlimento = (pedido.Alimentos?.Restricoes ?? "").Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+                    var conflito = restricoesCliente.Intersect(restricoesAlimento, StringComparer.OrdinalIgnoreCase).ToList();
+                    if (conflito.Any())
                     {
-                        ViewBag.AlertaRestricao = $"Estoque insuficiente para o alimento '{pedido.Alimentos.Descricao}'.";
-                        ViewData["ClientesId"] = new SelectList(_context.Clientes, "ClientesId", "Nome", vendas.ClientesId);
-                        ViewData["PedidosId"] = new SelectList(_context.Pedidos, "PedidosId", "AlimentosId", vendas.PedidosId);
-                        return View(vendas);
+                        conflitos.Add($"Atenção: O cliente '{cliente.Nome}' possui restrição alimentar '{cliente.Restricao}' e o alimento '{pedido.Alimentos.Descricao}' contém essa restrição. Venda pode ser perigosa!");
                     }
-
-                    // Diminui o estoque
-                    pedido.Alimentos.QtdEstoque -= pedido.Qtd;
-                    _context.Alimentos.Update(pedido.Alimentos);
                 }
 
+                if (conflitos.Any())
+                {
+                    ViewBag.AlertaRestricao = string.Join("<br>", conflitos);
+                    ViewData["ClientesId"] = new SelectList(_context.Clientes, "ClientesId", "Nome", vendas.ClientesId);
+                    ViewBag.Pedidos = _context.Pedidos.Select(p => new { p.PedidosId, p.Total }).ToList();
+                    return View(vendas); // NÃO SALVA, apenas exibe o alerta
+                }
+
+                // Se não houver conflito, salva normalmente
                 vendas.VendasId = Guid.NewGuid();
+                if (PedidosIds != null && PedidosIds.Any())
+                    vendas.PedidosId = PedidosIds.First(); // Preenche o campo obrigatório
+
+                vendas.Total = pedidosSelecionados.Sum(p => Convert.ToDecimal(p.Total)).ToString("F2");
+                vendas.DataVenda = DateTime.Now;
+
+                foreach (var pedido in pedidosSelecionados)
+                {
+                    if (pedido.Alimentos != null)
+                    {
+                        pedido.Alimentos.QtdEstoque -= pedido.Qtd;
+                        _context.Alimentos.Update(pedido.Alimentos);
+                    }
+                }
+
                 _context.Add(vendas);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+
             ViewData["ClientesId"] = new SelectList(_context.Clientes, "ClientesId", "Nome", vendas.ClientesId);
-            ViewData["PedidosId"] = new SelectList(_context.Pedidos, "PedidosId", "AlimentosId", vendas.PedidosId);
+            ViewBag.Pedidos = _context.Pedidos.Select(p => new { p.PedidosId, p.Total }).ToList();
             return View(vendas);
         }
-
 
 
 

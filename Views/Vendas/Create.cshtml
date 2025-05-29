@@ -23,10 +23,31 @@
                 <label asp-for="ClientesId" class="control-label"></label>
                 <select asp-for="ClientesId" class="form-control" asp-items="ViewBag.ClientesId"></select>
             </div>
+
+            <div class="mb-4"></div>
+
             <div class="form-group">
-                <label asp-for="PedidosId" class="control-label"></label>
-                <select asp-for="PedidosId" class="form-control" asp-items="ViewBag.PedidosId" id="PedidosId"></select>
+                <label>Pedidos</label>
+                <div id="pedidos-container">
+                    <div class="form-group row pedido-item align-items-center mb-2">
+                        <div class="col-10">
+                            <select name="PedidosIds" class="form-control" onchange="atualizarTotalVenda()">
+                                <option value="">Selecione o Pedido</option>
+                                @foreach (var pedido in ViewBag.Pedidos)
+                                {
+                                    <option value="@pedido.PedidosId" data-total="@pedido.Total">@pedido.PedidosId</option>
+                                }
+                            </select>
+
+                        </div>
+                        <div class="col-2">
+                            <button type="button" class="btn btn-danger" onclick="removerPedidoCampo(this)">Remover</button>
+                        </div>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-outline-danger mb-3" onclick="adicionarPedidoCampo()">Adicionar Pedido</button>
             </div>
+
             <div class="row">
                 <div class="col-md-12 col-lg-6">
                     <div class="form-group">
@@ -39,7 +60,7 @@
                 <div class="col-md-12 col-lg-6">
                     <div class="form-group">
                         <label asp-for="Total" class="control-label"></label>
-                        <input asp-for="Total" class="form-control" type="text" data-val="false" />
+                        <input asp-for="Total" class="form-control" id="Total" />
                         <span asp-validation-for="Total" class="text-danger"></span>
                     </div>
                 </div>
@@ -68,4 +89,44 @@
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
+    <script>
+            function adicionarPedidoCampo() {
+            let pedidos = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.Pedidos));
+            let container = document.getElementById('pedidos-container');
+            let div = document.createElement('div');
+            div.className = 'form-group row pedido-item align-items-center mb-2';
+            div.innerHTML = `
+                <div class="col-10">
+                    <select name="PedidosIds" class="form-control" onchange="atualizarTotalVenda()">
+                        <option value="">Selecione o Pedido</option>
+                        ${pedidos.map(p => `<option value="${p.PedidosId}" data-total="${p.Total}">${p.PedidosId}</option>`).join('')}
+                    </select>
+                </div>
+                <div class="col-2">
+                    <button type="button" class="btn btn-danger" onclick="removerPedidoCampo(this)">Remover</button>
+                </div>
+            `;
+            container.appendChild(div);
+        }
+
+
+            function removerPedidoCampo(btn) {
+            btn.closest('.pedido-item').remove();
+            atualizarTotalVenda();
+        }
+
+            function atualizarTotalVenda() {
+            let total = 0;
+            document.querySelectorAll('#pedidos-container select[name="PedidosIds"]').forEach(function(select) {
+                let selected = select.options[select.selectedIndex];
+                if (selected && selected.value) {
+                    let valor = parseFloat((selected.getAttribute('data-total') || '0').replace(',', '.'));
+                    if (!isNaN(valor)) {
+                        total += valor;
+                    }
+                }
+            });
+            document.getElementById('Total').value = total.toFixed(2);
+        }
+    </script>
 }
