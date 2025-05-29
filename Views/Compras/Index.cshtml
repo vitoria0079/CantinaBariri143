@@ -25,21 +25,12 @@
 <table class="table">
     <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Fornecedores)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Alimentos)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PrecoUnitario)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DataCompra)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.QtdUnitaria)
-            </th>
+            <th>@Html.DisplayNameFor(model => model.Fornecedores)</th>
+            <th>@Html.DisplayNameFor(model => model.Alimentos)</th>
+            <th>@Html.DisplayNameFor(model => model.PrecoUnitario)</th>
+            <th>@Html.DisplayNameFor(model => model.DataCompra)</th>
+            <th>@Html.DisplayNameFor(model => model.QtdUnitaria)</th>
+            <th>Total</th>
             <th></th>
         </tr>
     </thead>
@@ -47,21 +38,12 @@
         @foreach (var item in Model)
         {
             <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Fornecedores.RazaoSocial)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Alimentos.Descricao)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.PrecoUnitario)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.DataCompra)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.QtdUnitaria)
-                </td>
+                <td>@Html.DisplayFor(modelItem => item.Fornecedores.RazaoSocial)</td>
+                <td>@Html.DisplayFor(modelItem => item.Alimentos.Descricao)</td>
+                <td>@Html.DisplayFor(modelItem => item.PrecoUnitario)</td>
+                <td>@Html.DisplayFor(modelItem => item.DataCompra)</td>
+                <td>@Html.DisplayFor(modelItem => item.QtdUnitaria)</td>
+                <td>@((item.PrecoUnitario * item.QtdUnitaria).ToString("C2"))</td>
                 <td>
                     <a asp-action="Edit" type="button" class="btn btn-dark text-light" asp-route-id="@item.ComprasId">Editar</a>
                     <a asp-action="Details" type="button" class="btn btn-dark text-light" asp-route-id="@item.ComprasId">Detalhes</a>
@@ -70,4 +52,5 @@
             </tr>
         }
     </tbody>
+
 </table>

@@ -20,9 +20,10 @@
                 <div class="col-md-12 col-lg-6">
                     <div class="form-group">
                         <label asp-for="CPF" class="control-label"></label>
-                        <input asp-for="CPF" class="form-control" />
+                        <input asp-for="CPF" class="form-control" id="CPF" maxlength="14" />
                         <span asp-validation-for="CPF" class="text-danger"></span>
                     </div>
+
                 </div>
 
                 <div class="col-md-12 col-lg-6">
@@ -55,5 +56,12 @@
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
+        <script>
+            $(document).ready(function () {
+                $('#CPF').mask('000.000.000-00');
+            });
+        </script>
     }
 }

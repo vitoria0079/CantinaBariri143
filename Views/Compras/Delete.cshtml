@@ -39,6 +39,9 @@
                 <dd>
                     @Html.DisplayFor(model => model.QtdUnitaria)
                 </dd>
+                <dt>Total</dt>
+                <dd>@((Model.PrecoUnitario * Model.QtdUnitaria).ToString("C2"))</dd>
+
             </dl>
 
             <form asp-action="Delete">
