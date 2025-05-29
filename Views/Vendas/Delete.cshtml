@@ -3,49 +3,51 @@
 @{
     ViewData["Title"] = "Delete";
 }
+<div class="d-flex justify-content-center align-items-center" style="min-height: 60vh; margin-top:60px;">
+    <div class="w-100" style="max-width: 500px;">
 
-<h1>Deletar</h1>
+        <div class="border rounded p-3" style="box-shadow:5px 5px 20px; background-color: #fff;">
+            <h1 class="text-center mb-4">Deletar</h1>
+            <hr />
+            <dl>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Clientes)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Clientes.Nome)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Pedidos)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Pedidos.AlimentosId)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.DataVenda)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.DataVenda)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Total)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Total)
+                </dd>
+            </dl>
 
-<div>
-    <h4>Vendas</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Clientes)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Clientes.Nome)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Pedidos)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Pedidos.AlimentosId)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.DataVenda)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.DataVenda)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Total)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Total)
-        </dd>
-    </dl>
+            <form asp-action="Delete">
+                <input type="hidden" asp-for="VendasId" />
+                <div class="row justify-content-between">
+                    <div class="col-5 mt-3">
+                        <input type="submit" value="Deletar" class="btn btn-danger w-100 p-2" />
+                    </div>
 
-    <form asp-action="Delete">
-        <input type="hidden" asp-for="VendasId" />
-        <div class="row">
-            <div class="col-2 mt-3">
-                <input type="submit" value="Deletar" class="btn btn-danger w-100 p-2" />
-            </div>
-
-            <div class="col-2 mt-3">
-                <a asp-action="Index" class="btn btn-danger w-100 p-2">Voltar </a>
-            </div>
+                    <div class="col-5 mt-3">
+                        <a asp-action="Index" class="btn btn-danger w-100 p-2">Voltar </a>
+                    </div>
+                </div>
+            </form>
         </div>
-    </form>
+    </div>
 </div>
