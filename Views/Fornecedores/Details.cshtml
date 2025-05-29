@@ -4,37 +4,40 @@
     ViewData["Title"] = "Details";
 }
 
-<h1>Detalhes</h1>
+<div class="d-flex justify-content-center align-items-center" style="min-height: 60vh;">
+    <div class="w-100" style="max-width: 500px;">
 
-<div>
-    <h4>Fornecedores</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.RazaoSocial)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.RazaoSocial)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.CNPJ)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.CNPJ)
-        </dd>
-    </dl>
-</div>
+        <div class="border rounded p-3" style="box-shadow:5px 5px 20px; background-color: #fff;">
+            <h1 class="text-center mb-4">Detalhes</h1>
+            <hr />
+            <dl>
+                <dt>
+                    @Html.DisplayNameFor(model => model.RazaoSocial)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.RazaoSocial)
+                </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.CNPJ)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.CNPJ)
+                </dd>
+            </dl>
 
-<div class="row">
-    <div class="col-2 mt-3">
-        <div class="form-group">
-            <a asp-action="Edit" asp-route-id="@Model?.FornecedoresId" class="btn btn-danger text-light w-100 p-2">Editar</a>
-        </div>
-    </div>
+            <div class="row justify-content-between">
+                <div class="col-5 mt-3">
+                    <div class="form-group">
+                        <a asp-action="Edit" asp-route-id="@Model?.FornecedoresId" class="btn btn-danger text-light w-100 p-2">Editar</a>
+                    </div>
+                </div>
 
-    <div class="col-2 mt-3">
-        <div>
-            <a asp-action="Index" type="button" class="btn btn-danger text-light w-100 p-2">Voltar</a>
+                <div class="col-5 mt-3">
+                    <div>
+                        <a asp-action="Index" type="button" class="btn btn-danger text-light w-100 p-2">Voltar</a>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>

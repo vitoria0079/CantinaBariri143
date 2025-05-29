@@ -4,56 +4,42 @@
     ViewData["Title"] = "Details";
 }
 
-<h1>Detalhes</h1>
+<div class="d-flex justify-content-center align-items-center" style="min-height: 60vh;">
+    <div class="w-100" style="max-width: 500px;">
 
-<div>
-    <h4>Alimentos</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Descricao)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Descricao)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.PrecoUnitario)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.PrecoUnitario)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Validade)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Validade)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.QtdEstoque)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.QtdEstoque)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Restricoes)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Restricoes)
-        </dd>
-    </dl>
-</div>
+        <div class="border rounded p-3" style="box-shadow:5px 5px 20px; background-color: #fff;">
+            <h1 class="text-center mb-4">Detalhes</h1>
+            <hr />
+            <dl>
+                <dt>@Html.DisplayNameFor(model => model.Descricao)</dt>
+                <dd>@Html.DisplayFor(model => model.Descricao)</dd>
 
-<div class="row">
-    <div class="col-2 mt-3">
-        <div class="form-group">
-            <a asp-action="Edit" asp-route-id="@Model?.AlimentosId" class="btn btn-danger text-light w-100 p-2">Editar</a>
-        </div>
-    </div>
+                <dt>@Html.DisplayNameFor(model => model.PrecoUnitario)</dt>
+                <dd>@Html.DisplayFor(model => model.PrecoUnitario)</dd>
 
-    <div class="col-2 mt-3">
-        <div>
-            <a asp-action="Index" type="button" class="btn btn-danger text-light w-100 p-2">Voltar</a>
+                <dt>@Html.DisplayNameFor(model => model.Validade)</dt>
+                <dd>@Html.DisplayFor(model => model.Validade)</dd>
+
+                <dt>@Html.DisplayNameFor(model => model.QtdEstoque)</dt>
+                <dd>@Html.DisplayFor(model => model.QtdEstoque)</dd>
+
+                <dt>@Html.DisplayNameFor(model => model.Restricoes)</dt>
+                <dd>@Html.DisplayFor(model => model.Restricoes)</dd>
+            </dl>
+
+            <div class="row justify-content-between">
+                <div class="col-5 mt-3">
+                    <div class="form-group">
+                        <a asp-action="Edit" asp-route-id="@Model?.AlimentosId" class="btn btn-danger text-light w-100 p-2">Editar</a>
+                    </div>
+                </div>
+
+                <div class="col-5 mt-3">
+                    <div>
+                        <a asp-action="Index" type="button" class="btn btn-danger text-light w-100 p-2">Voltar</a>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
-
