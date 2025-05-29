@@ -35,7 +35,9 @@
                                 <option value="">Selecione o Pedido</option>
                                 @foreach (var pedido in ViewBag.Pedidos)
                                 {
-                                    <option value="@pedido.PedidosId" data-total="@pedido.Total">@pedido.PedidosId</option>
+                                    <option value="@pedido.PedidosId" data-total="@pedido.Total">
+                                        @pedido.NumeroPedido
+                                    </option>
                                 }
                             </select>
 

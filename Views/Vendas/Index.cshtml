@@ -2,7 +2,9 @@
 
 @{
     ViewData["Title"] = "Index";
+    var numeroPedidoDict = ViewBag.NumeroPedidoDict as Dictionary<Guid, string>;
 }
+
 
 <h1>Vendas</h1>
 
@@ -25,18 +27,10 @@
 <table class="table">
     <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Clientes)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Pedidos)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DataVenda)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Total)
-            </th>
+            <th>@Html.DisplayNameFor(model => model.Clientes)</th>
+            <th>@Html.DisplayNameFor(model => model.Pedidos)</th>
+            <th>@Html.DisplayNameFor(model => model.DataVenda)</th>
+            <th>@Html.DisplayNameFor(model => model.Total)</th>
             <th></th>
         </tr>
     </thead>
@@ -48,7 +42,9 @@
                     @Html.DisplayFor(modelItem => item.Clientes.Nome)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Pedidos.AlimentosId)
+                    @(numeroPedidoDict != null && numeroPedidoDict.ContainsKey(item.PedidosId)
+                        ? numeroPedidoDict[item.PedidosId]
+                        : "N/A")
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.DataVenda)
