@@ -22,8 +22,26 @@ namespace CantinaBariri143.Controllers
         // GET: Vendas
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Vendas.Include(v => v.Clientes).Include(v => v.Pedidos);
-            return View(await applicationDbContext.ToListAsync());
+            // Carrega todos os pedidos ordenados por DataPedido
+            var pedidosOrdenados = await _context.Pedidos
+                .OrderBy(p => p.DataPedido)
+                .Select(p => p.PedidosId)
+                .ToListAsync();
+
+            // Cria o dicionário: PedidosId => NumeroPedido (D5)
+            var numeroPedidoDict = pedidosOrdenados
+                .Select((id, idx) => new { id, numero = (idx + 1).ToString("D5") })
+                .ToDictionary(x => x.id, x => x.numero);
+
+            // Carrega as vendas com os pedidos relacionados
+            var vendas = await _context.Vendas
+                .Include(v => v.Clientes)
+                .Include(v => v.Pedidos)
+                .ToListAsync();
+
+            ViewBag.NumeroPedidoDict = numeroPedidoDict;
+
+            return View(vendas);
         }
 
         // GET: Vendas/Details/5
@@ -49,8 +67,15 @@ namespace CantinaBariri143.Controllers
         {
             ViewData["ClientesId"] = new SelectList(_context.Clientes, "ClientesId", "Nome");
             ViewBag.Pedidos = _context.Pedidos
-                .Select(p => new { p.PedidosId, p.Total })
-                .ToList();
+            .OrderBy(p => p.DataPedido)
+            .ToList() // materializa a lista na memória
+            .Select((p, index) => new
+            {
+                p.PedidosId,
+                NumeroPedido = (index + 1).ToString("D5"),
+                p.Total
+            })
+            .ToList();
 
             return View();
         }
@@ -66,12 +91,31 @@ namespace CantinaBariri143.Controllers
             if (ModelState.IsValid)
             {
                 var cliente = await _context.Clientes.FindAsync(vendas.ClientesId);
+
+                // Adicione esta linha antes de usar pedidosSelecionados:
                 var pedidosSelecionados = _context.Pedidos
                     .Include(p => p.Alimentos)
                     .Where(p => PedidosIds.Contains(p.PedidosId))
                     .ToList();
 
-                // Verifica restrições
+                var pedidos = _context.Pedidos
+                .OrderBy(p => p.DataPedido)
+                .ToList()
+                .Select((p, index) => new
+                {
+                    p.PedidosId,
+                    NumeroPedido = (index + 1).ToString("D5"),
+                    p.AlimentosId,
+                    p.Qtd,
+                    p.DataPedido,
+                    p.Total
+                    // adicione outros campos que quiser exibir
+                })
+                .ToList();
+
+                ViewBag.Pedidos = pedidos;
+
+                // Agora pedidosSelecionados está disponível para uso
                 var restricoesCliente = (cliente?.Restricao ?? "").Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
                 var conflitos = new List<string>();
 
@@ -89,7 +133,16 @@ namespace CantinaBariri143.Controllers
                 {
                     ViewBag.AlertaRestricao = string.Join("<br>", conflitos);
                     ViewData["ClientesId"] = new SelectList(_context.Clientes, "ClientesId", "Nome", vendas.ClientesId);
-                    ViewBag.Pedidos = _context.Pedidos.Select(p => new { p.PedidosId, p.Total }).ToList();
+                    ViewBag.Pedidos = _context.Pedidos
+                        .OrderBy(p => p.DataPedido)
+                        .ToList()
+                        .Select((p, index) => new
+                        {
+                            p.PedidosId,
+                            NumeroPedido = (index + 1).ToString("D5"),
+                            p.Total
+                        })
+                        .ToList();
                     return View(vendas); // NÃO SALVA, apenas exibe o alerta
                 }
 
