@@ -23,7 +23,7 @@
                 <span asp-validation-for="AlimentosId" class="text-danger"></span>
             </div>
             <div class="row">
-                <div class="col-md-12 col-lg-4">
+                <div class="col-md-6">
                     <div class="form-group">
                         <label asp-for="PrecoUnitario" class="control-label"></label>
                         <input asp-for="PrecoUnitario" class="form-control" type="text" data-val="false" />
@@ -31,19 +31,26 @@
                     </div>
                 </div>
 
-                <div class="col-md-12 col-lg-4">
+                <div class="col-md-6">
                     <div class="form-group">
                         <label asp-for="DataCompra" class="control-label"></label>
                         <input asp-for="DataCompra" class="form-control" />
                         <span asp-validation-for="DataCompra" class="text-danger"></span>
                     </div>
                 </div>
-
-                <div class="col-md-12 col-lg-4">
+            </div>
+            <div class="row">
+                <div class="col-md-6">
                     <div class="form-group">
                         <label asp-for="QtdUnitaria" class="control-label"></label>
-                        <input asp-for="QtdUnitaria" class="form-control" />
+                        <input asp-for="QtdUnitaria" class="form-control" id="QtdUnitaria" />
                         <span asp-validation-for="QtdUnitaria" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Total</label>
+                        <input class="form-control" value="@((Model.PrecoUnitario * Model.QtdUnitaria).ToString("C2"))" />
                     </div>
                 </div>
             </div>
