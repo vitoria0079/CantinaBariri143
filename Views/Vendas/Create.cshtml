@@ -31,7 +31,7 @@
                 <div class="col-md-12 col-lg-6">
                     <div class="form-group">
                         <label asp-for="DataVenda" class="control-label"></label>
-                        <input asp-for="DataVenda" class="form-control" />
+                        <input asp-for="DataVenda" class="form-control" readonly value="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")" />
                         <span asp-validation-for="DataVenda" class="text-danger"></span>
                     </div>
                 </div>
