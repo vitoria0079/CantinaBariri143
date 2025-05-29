@@ -38,8 +38,15 @@
                 <div class="col-md-12 col-lg-4">
                     <div class="form-group">
                         <label asp-for="QtdUnitaria" class="control-label"></label>
-                        <input asp-for="QtdUnitaria" class="form-control" />
+                        <input asp-for="QtdUnitaria" class="form-control" id="QtdUnitaria" />
                         <span asp-validation-for="QtdUnitaria" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-12 col-lg-4">
+                        <div class="form-group">
+                            <label>Total</label>
+                            <input class="form-control" id="Total" name="Total" type="text" readonly />
+                        </div>
                     </div>
                 </div>
             </div>
@@ -68,19 +75,24 @@
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
+            document.addEventListener("DOMContentLoaded", function () {
             var valoresAlimentos = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.AlimentosValores));
 
-            function atualizarPrecoUnitario() {
+            function atualizarPrecoUnitarioETotal() {
                 var alimentoId = document.getElementById("AlimentosId").value;
                 var precoUnitario = valoresAlimentos[alimentoId] || 0;
                 document.getElementById("PrecoUnitario").value = precoUnitario.toLocaleString('pt-BR', { minimumFractionDigits: 2 });
+
+                var qtd = parseFloat(document.getElementById("QtdUnitaria").value.replace(',', '.')) || 0;
+                var total = precoUnitario * qtd;
+                document.getElementById("Total").value = total.toFixed(2).replace('.', ',');
             }
 
-            document.getElementById("AlimentosId").addEventListener("change", atualizarPrecoUnitario);
+            document.getElementById("AlimentosId").addEventListener("change", atualizarPrecoUnitarioETotal);
+            document.getElementById("QtdUnitaria").addEventListener("input", atualizarPrecoUnitarioETotal);
 
             // Inicializa ao carregar a página
-            atualizarPrecoUnitario();
+            atualizarPrecoUnitarioETotal();
         });
     </script>
 }
