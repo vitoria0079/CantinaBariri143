@@ -63,6 +63,27 @@ namespace CantinaBariri143.Controllers
         {
             if (ModelState.IsValid)
             {
+                // Busca o pedido e o alimento relacionado
+                var pedido = await _context.Pedidos
+                    .Include(p => p.Alimentos)
+                    .FirstOrDefaultAsync(p => p.PedidosId == vendas.PedidosId);
+
+                if (pedido?.Alimentos != null)
+                {
+                    // Verifica se há estoque suficiente
+                    if (pedido.Alimentos.QtdEstoque < pedido.Qtd)
+                    {
+                        ViewBag.AlertaRestricao = $"Estoque insuficiente para o alimento '{pedido.Alimentos.Descricao}'.";
+                        ViewData["ClientesId"] = new SelectList(_context.Clientes, "ClientesId", "Nome", vendas.ClientesId);
+                        ViewData["PedidosId"] = new SelectList(_context.Pedidos, "PedidosId", "AlimentosId", vendas.PedidosId);
+                        return View(vendas);
+                    }
+
+                    // Diminui o estoque
+                    pedido.Alimentos.QtdEstoque -= pedido.Qtd;
+                    _context.Alimentos.Update(pedido.Alimentos);
+                }
+
                 vendas.VendasId = Guid.NewGuid();
                 _context.Add(vendas);
                 await _context.SaveChangesAsync();
@@ -72,6 +93,9 @@ namespace CantinaBariri143.Controllers
             ViewData["PedidosId"] = new SelectList(_context.Pedidos, "PedidosId", "AlimentosId", vendas.PedidosId);
             return View(vendas);
         }
+
+
+
 
         // GET: Vendas/Edit/5
         public async Task<IActionResult> Edit(Guid? id)
@@ -157,13 +181,24 @@ namespace CantinaBariri143.Controllers
             {
                 return Problem("Entity set 'ApplicationDbContext.Vendas'  is null.");
             }
-            var vendas = await _context.Vendas.FindAsync(id);
+            var vendas = await _context.Vendas
+                .Include(v => v.Pedidos)
+                .ThenInclude(p => p.Alimentos)
+                .FirstOrDefaultAsync(v => v.VendasId == id);
+
             if (vendas != null)
             {
+                // Devolve a quantidade ao estoque
+                if (vendas.Pedidos?.Alimentos != null)
+                {
+                    vendas.Pedidos.Alimentos.QtdEstoque += vendas.Pedidos.Qtd;
+                    _context.Alimentos.Update(vendas.Pedidos.Alimentos);
+                }
+
                 _context.Vendas.Remove(vendas);
+                await _context.SaveChangesAsync();
             }
 
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 

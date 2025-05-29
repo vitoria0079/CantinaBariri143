@@ -24,14 +24,14 @@
                 <div class="col-md-12 col-lg-4">
                     <div class="form-group">
                         <label asp-for="PrecoUnitario" class="control-label"></label>
-                        <input asp-for="PrecoUnitario" class="form-control" />
+                        <input asp-for="PrecoUnitario" class="form-control" type="text" data-val="false" />
                         <span asp-validation-for="PrecoUnitario" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="col-md-12 col-lg-4">
                     <div class="form-group">
                         <label asp-for="DataCompra" class="control-label"></label>
-                        <input asp-for="DataCompra" class="form-control" />
+                        <input asp-for="DataCompra" class="form-control" readonly value="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")" />
                         <span asp-validation-for="DataCompra" class="text-danger"></span>
                     </div>
                 </div>
