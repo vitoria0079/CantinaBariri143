@@ -35,18 +35,28 @@
             @Html.DisplayFor(model => model.Total)
         </dd>
     </dl>
-</div>
 
-<div class="row">
-    <div class="col-2 mt-3">
-        <div class="form-group">
-            <a asp-action="Edit" asp-route-id="@Model?.VendasId" class="btn btn-danger text-light w-100 p-2">Editar</a>
-        </div>
-    </div>
-
-    <div class="col-2 mt-3">
-        <div>
-            <a asp-action="Index" type="button" class="btn btn-danger text-light w-100 p-2">Voltar</a>
-        </div>
-    </div>
+    @if (ViewBag.PedidosDaVenda != null)
+    {
+        <h4>Pedidos desta venda</h4>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Alimento</th>
+                    <th>Quantidade</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var pedido in (IEnumerable<CantinaBariri143.Models.Pedidos>)ViewBag.PedidosDaVenda)
+                {
+                    <tr>
+                        <td>@pedido.AlimentosId</td>
+                        <td>@pedido.Qtd</td>
+                        <td>@pedido.Total</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
 </div>
