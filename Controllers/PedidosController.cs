@@ -48,7 +48,6 @@ namespace CantinaBariri143.Controllers
         public IActionResult Create()
         {
             ViewData["AlimentosId"] = new SelectList(_context.Alimentos, "AlimentosId", "Descricao");
-            // Dicionário: AlimentosId => PrecoUnitario
             ViewBag.AlimentosValores = _context.Alimentos
                 .ToDictionary(a => a.AlimentosId.ToString(), a => a.PrecoUnitario);
             return View();
@@ -69,6 +68,8 @@ namespace CantinaBariri143.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["AlimentosId"] = new SelectList(_context.Alimentos, "AlimentosId", "Descricao", pedidos.AlimentosId);
+            ViewBag.AlimentosValores = _context.Alimentos
+                .ToDictionary(a => a.AlimentosId.ToString(), a => a.PrecoUnitario);
             return View(pedidos);
         }
 
@@ -86,6 +87,11 @@ namespace CantinaBariri143.Controllers
                 return NotFound();
             }
             ViewData["AlimentosId"] = new SelectList(_context.Alimentos, "AlimentosId", "Descricao", pedidos.AlimentosId);
+
+            // Adicione esta linha:
+            ViewBag.AlimentosValores = _context.Alimentos
+                .ToDictionary(a => a.AlimentosId.ToString(), a => a.PrecoUnitario);
+
             return View(pedidos);
         }
 
@@ -122,6 +128,11 @@ namespace CantinaBariri143.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["AlimentosId"] = new SelectList(_context.Alimentos, "AlimentosId", "Descricao", pedidos.AlimentosId);
+
+            // Adicione esta linha:
+            ViewBag.AlimentosValores = _context.Alimentos
+                .ToDictionary(a => a.AlimentosId.ToString(), a => a.PrecoUnitario);
+
             return View(pedidos);
         }
 
