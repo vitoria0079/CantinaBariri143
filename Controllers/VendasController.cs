@@ -29,13 +29,10 @@ namespace CantinaBariri143.Controllers
         // GET: Vendas/Details/5
         public async Task<IActionResult> Details(Guid? id)
         {
-            if (id == null || _context.Vendas == null)
-            {
-                return NotFound();
-            }
 
             var venda = await _context.Vendas
                 .Include(v => v.Clientes)
+                .Include(v => v.Pedidos)
                 .FirstOrDefaultAsync(m => m.VendasId == id);
 
             if (venda == null)
@@ -43,20 +40,9 @@ namespace CantinaBariri143.Controllers
                 return NotFound();
             }
 
-            // Busca os pedidos relacionados a esta venda pelo mesmo cliente e data da venda
-            var pedidosDaVenda = await _context.Pedidos
-                .Where(p => p.DataPedido.Date == venda.DataVenda.Date && p.AlimentosId == venda.Pedidos.AlimentosId && p.Qtd == venda.Pedidos.Qtd && p.Total == venda.Pedidos.Total)
-                .ToListAsync();
-
-            // Ou, se quiser buscar todos os pedidos do cliente na mesma data:
-            // var pedidosDaVenda = await _context.Pedidos
-            //     .Where(p => p.DataPedido.Date == venda.DataVenda.Date && p.AlimentosId == venda.Pedidos.AlimentosId)
-            //     .ToListAsync();
-
-            ViewBag.PedidosDaVenda = pedidosDaVenda;
-
             return View(venda);
         }
+
 
         // GET: Vendas/Create
         public IActionResult Create()
