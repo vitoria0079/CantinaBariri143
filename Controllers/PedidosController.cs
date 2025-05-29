@@ -48,6 +48,9 @@ namespace CantinaBariri143.Controllers
         public IActionResult Create()
         {
             ViewData["AlimentosId"] = new SelectList(_context.Alimentos, "AlimentosId", "Descricao");
+            // Dicionário: AlimentosId => PrecoUnitario
+            ViewBag.AlimentosValores = _context.Alimentos
+                .ToDictionary(a => a.AlimentosId.ToString(), a => a.PrecoUnitario);
             return View();
         }
 

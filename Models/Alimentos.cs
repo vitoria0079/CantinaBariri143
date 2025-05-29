@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CantinaBariri143.Models
 {
@@ -28,5 +29,6 @@ namespace CantinaBariri143.Models
         [Display(Name = "Restrições")]
         [Required(ErrorMessage = "O campo Restrições é obrigatório.")]
         public string Restricoes { get; set; }
+
     }
 }
