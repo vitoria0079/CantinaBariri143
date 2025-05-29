@@ -49,8 +49,10 @@ namespace CantinaBariri143.Controllers
         // GET: Compras/Create
         public IActionResult Create()
         {
-            ViewData["AlimentosId"] = new SelectList(_context.Alimentos, "AlimentosId", "Descricao");
             ViewData["FornecedoresId"] = new SelectList(_context.Fornecedores, "FornecedoresId", "RazaoSocial");
+            ViewData["AlimentosId"] = new SelectList(_context.Alimentos, "AlimentosId", "Descricao");
+            ViewBag.AlimentosValores = _context.Alimentos
+                .ToDictionary(a => a.AlimentosId.ToString(), a => a.PrecoUnitario);
             return View();
         }
 
@@ -68,8 +70,10 @@ namespace CantinaBariri143.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["AlimentosId"] = new SelectList(_context.Alimentos, "AlimentosId", "Descricao", compras.AlimentosId);
             ViewData["FornecedoresId"] = new SelectList(_context.Fornecedores, "FornecedoresId", "RazaoSocial", compras.FornecedoresId);
+            ViewData["AlimentosId"] = new SelectList(_context.Alimentos, "AlimentosId", "Descricao", compras.AlimentosId);
+            ViewBag.AlimentosValores = _context.Alimentos
+                .ToDictionary(a => a.AlimentosId.ToString(), a => a.PrecoUnitario);
             return View(compras);
         }
 
