@@ -15,30 +15,36 @@
             <div class="form-group">
                 <label asp-for="AlimentosId" class="control-label"></label>
                 <select asp-for="AlimentosId" class="form-control" asp-items="ViewBag.AlimentosId" id="AlimentosId"></select>
-                <div class="form-group mt-2">
-                    <label>Preço Unitário</label>
-                    <input class="form-control" id="PrecoUnitarioVisivel" type="text" readonly />
-                    <input type="hidden" id="PrecoUnitario" name="PrecoUnitario" />
-                </div>
                 <span asp-validation-for="AlimentosId" class="text-danger"></span>
             </div>
+
             <div class="row">
-                <div class="col-md-12 col-lg-4">
-                    <div class="form-group">
+                <div class="col-md-6">
+                    <div class="form-group mt-2">
+                        <label>Preço Unitário</label>
+                        <input class="form-control" id="PrecoUnitarioVisivel" type="text" readonly />
+                        <input type="hidden" id="PrecoUnitario" name="PrecoUnitario" />
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group mt-2">
                         <label asp-for="Qtd" class="control-label"></label>
                         <input asp-for="Qtd" class="form-control" id="Qtd" />
                         <span asp-validation-for="Qtd" class="text-danger"></span>
                     </div>
                 </div>
-                <div class="col-md-12 col-lg-4">
-                    <div class="form-group">
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group mt-2">
                         <label asp-for="DataPedido" class="control-label"></label>
                         <input asp-for="DataPedido" class="form-control" />
                         <span asp-validation-for="DataPedido" class="text-danger"></span>
                     </div>
                 </div>
-                <div class="col-md-12 col-lg-4">
-                    <div class="form-group">
+                <div class="col-md-6">
+                    <div class="form-group mt-2">
                         <label asp-for="Total" class="control-label"></label>
                         <input asp-for="Total" class="form-control" id="Total" readonly />
                         <span asp-validation-for="Total" class="text-danger"></span>
@@ -59,7 +65,6 @@
                     </div>
                 </div>
             </div>
-
         </form>
     </div>
 </div>
