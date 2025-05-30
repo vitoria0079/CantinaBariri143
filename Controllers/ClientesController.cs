@@ -65,6 +65,12 @@ namespace CantinaBariri143.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+
+            if (string.IsNullOrWhiteSpace(clientes.Restricao))
+            {
+                clientes.Restricao = "Nenhuma restrição";
+            }
+
             return View(clientes);
         }
 
@@ -116,6 +122,12 @@ namespace CantinaBariri143.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+
+            if (string.IsNullOrWhiteSpace(clientes.Restricao))
+            {
+                clientes.Restricao = "Nenhuma restrição";
+            }
+
             return View(clientes);
         }
 
