@@ -19,7 +19,6 @@ namespace CantinaBariri143.Models
         public string CPF { get; set; }
 
         [Display(Name = "Restrição")]
-        [Required(ErrorMessage = "O campo Restrição é obrigatório.")]
-        public string Restricao { get; set; }
+        public string? Restricao { get; set; }
     }
 }
