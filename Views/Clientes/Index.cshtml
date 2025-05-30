@@ -48,7 +48,7 @@
                     @Html.DisplayFor(modelItem => item.CPF)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Restricao)
+                    @(string.IsNullOrWhiteSpace(item.Restricao) ? "Nenhuma restrição" : item.Restricao)
                 </td>
                 <td>
                     <a asp-action="Edit" type="button" class="btn btn-dark text-light" asp-route-id="@item.ClientesId">Editar</a>
