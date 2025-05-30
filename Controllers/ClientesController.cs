@@ -60,20 +60,18 @@ namespace CantinaBariri143.Controllers
         {
             if (ModelState.IsValid)
             {
+                if (string.IsNullOrWhiteSpace(clientes.Restricao))
+                {
+                    clientes.Restricao = "Nenhuma restrição";
+                }
                 clientes.ClientesId = Guid.NewGuid();
                 _context.Add(clientes);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
 
-            if (string.IsNullOrWhiteSpace(clientes.Restricao))
-            {
-                clientes.Restricao = "Nenhuma restrição";
-            }
-
             return View(clientes);
         }
-
         // GET: Clientes/Edit/5
         public async Task<IActionResult> Edit(Guid? id)
         {
@@ -104,6 +102,10 @@ namespace CantinaBariri143.Controllers
 
             if (ModelState.IsValid)
             {
+                if (string.IsNullOrWhiteSpace(clientes.Restricao))
+                {
+                    clientes.Restricao = "Nenhuma restrição";
+                }
                 try
                 {
                     _context.Update(clientes);
@@ -121,11 +123,6 @@ namespace CantinaBariri143.Controllers
                     }
                 }
                 return RedirectToAction(nameof(Index));
-            }
-
-            if (string.IsNullOrWhiteSpace(clientes.Restricao))
-            {
-                clientes.Restricao = "Nenhuma restrição";
             }
 
             return View(clientes);
